@@ -5,9 +5,9 @@ public class CourseManagement {
     private final ArrayList<CourseModel> courses;
     private final Scanner scanner;
 
-    public CourseManagement() {
+    public CourseManagement(Scanner scanner) {
         this.courses = new ArrayList<>();
-        this.scanner = new Scanner(System.in);
+        this.scanner = scanner;
     }
 
     public ArrayList<CourseModel> getCourses() {
@@ -74,6 +74,99 @@ public class CourseManagement {
             System.out.println("No courses available.");
         } else {
             courses.forEach(c -> System.out.println(c.toString()));
+        }
+    }
+
+    public void addAssignment() {
+        System.out.println("\n=== Add New Assignment ===");
+        displayAllCourses();
+        
+        if (courses.isEmpty()) {
+            return;
+        }
+
+        try {
+            int courseId = Integer.parseInt(Utils.readInput(scanner, "Enter course ID: "));
+            CourseModel course = findCourseById(courseId);
+
+            if (course == null) {
+                System.out.println("Course not found!");
+                return;
+            }
+
+            String title = Utils.readInput(scanner, "Enter assignment title: ");
+            String description = Utils.readInput(scanner, "Enter assignment description: ");
+            String dueDate = Utils.readInput(scanner, "Enter due date: ");
+            int maxScore = Integer.parseInt(Utils.readInput(scanner, "Enter maximum score: "));
+
+            Assignment assignment = new Assignment(
+                Utils.generateUniqueId(),
+                title,
+                description,
+                dueDate,
+                maxScore,
+                courseId
+            );
+
+            course.addAssignment(assignment);
+            System.out.println("Assignment added successfully!");
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid number format!");
+        }
+    }
+
+    public void viewAssignments(int courseId) {
+        CourseModel course = findCourseById(courseId);
+        if (course == null) {
+            System.out.println("Course not found!");
+            return;
+        }
+
+        System.out.println("\n=== Assignments for " + course.getCourseName() + " ===");
+        ArrayList<Assignment> assignments = course.getAssignments();
+        
+        if (assignments.isEmpty()) {
+            System.out.println("No assignments found for this course.");
+        } else {
+            assignments.forEach(a -> System.out.println(a.toString()));
+        }
+    }
+
+    public void deleteAssignment() {
+        System.out.println("\n=== Delete Assignment ===");
+        displayAllCourses();
+        
+        if (courses.isEmpty()) {
+            return;
+        }
+
+        try {
+            int courseId = Integer.parseInt(Utils.readInput(scanner, "Enter course ID: "));
+            CourseModel course = findCourseById(courseId);
+
+            if (course == null) {
+                System.out.println("Course not found!");
+                return;
+            }
+
+            viewAssignments(courseId);
+            ArrayList<Assignment> assignments = course.getAssignments();
+            
+            if (assignments.isEmpty()) {
+                return;
+            }
+
+            int assignmentId = Integer.parseInt(Utils.readInput(scanner, "Enter assignment ID to delete: "));
+            Assignment assignment = course.findAssignment(assignmentId);
+
+            if (assignment != null) {
+                course.removeAssignment(assignmentId);
+                System.out.println("Assignment deleted successfully!");
+            } else {
+                System.out.println("Assignment not found!");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid number format!");
         }
     }
 }

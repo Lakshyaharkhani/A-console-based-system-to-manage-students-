@@ -17,7 +17,7 @@ public class Main {
             System.out.println("3. Exit");
             System.out.print("Choose an option: ");
 
-            String choice = scanner.nextLine().trim();
+            String choice = Utils.readInput(scanner, "");
             
             switch (choice) {
                 case "1":
@@ -29,6 +29,7 @@ public class Main {
                 case "3":
                     System.out.println("Thank you for using the Course Management System!");
                     System.exit(0);
+                    break;
                 default:
                     System.out.println("Invalid choice! Please try again.");
             }
@@ -37,9 +38,9 @@ public class Main {
 
     private static void initialize() {
         scanner = new Scanner(System.in);
-        userManagement = new UserManagement();
-        courseManagement = new CourseManagement();
-        enrollmentManagement = new EnrollmentManagement(userManagement, courseManagement);
+        userManagement = new UserManagement(scanner);
+        courseManagement = new CourseManagement(scanner);
+        enrollmentManagement = new EnrollmentManagement(userManagement, courseManagement, scanner);
     }
 
     private static void handleLogin() {
@@ -61,10 +62,14 @@ public class Main {
             System.out.println("3. Add Course");
             System.out.println("4. Delete Course");
             System.out.println("5. View All Courses");
-            System.out.println("6. Logout");
+            System.out.println("6. Add Assignment");
+            System.out.println("7. View Assignments");
+            System.out.println("8. Delete Assignment");
+            System.out.println("9. Search Students");
+            System.out.println("10. Logout");
             System.out.print("Choose an option: ");
 
-            String choice = scanner.nextLine().trim();
+            String choice = Utils.readInput(scanner, "");
             
             switch (choice) {
                 case "1":
@@ -83,6 +88,24 @@ public class Main {
                     courseManagement.displayAllCourses();
                     break;
                 case "6":
+                    courseManagement.addAssignment();
+                    break;
+                case "7":
+                    System.out.print("Enter course ID to view assignments: ");
+                    try {
+                        int courseId = Integer.parseInt(scanner.nextLine().trim());
+                        courseManagement.viewAssignments(courseId);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid course ID format!");
+                    }
+                    break;
+                case "8":
+                    courseManagement.deleteAssignment();
+                    break;
+                case "9":
+                    userManagement.searchStudents();
+                    break;
+                case "10":
                     return;
                 default:
                     System.out.println("Invalid choice! Please try again.");
@@ -100,7 +123,7 @@ public class Main {
             System.out.println("5. Logout");
             System.out.print("Choose an option: ");
 
-            String choice = scanner.nextLine().trim();
+            String choice = Utils.readInput(scanner, "");
             
             switch (choice) {
                 case "1":

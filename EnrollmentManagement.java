@@ -5,10 +5,10 @@ public class EnrollmentManagement {
     private final CourseManagement courseManagement;
     private final Scanner scanner;
 
-    public EnrollmentManagement(UserManagement userManagement, CourseManagement courseManagement) {
+    public EnrollmentManagement(UserManagement userManagement, CourseManagement courseManagement, Scanner scanner) {
         this.userManagement = userManagement;
         this.courseManagement = courseManagement;
-        this.scanner = new Scanner(System.in);
+        this.scanner = scanner;
     }
 
     public void registerUser() {
@@ -36,7 +36,7 @@ public class EnrollmentManagement {
         }
 
         User newUser = new User(
-            Utils.generateUniqueId(),
+            generateUniqueUserId(),
             username,
             email,
             phone,
@@ -46,6 +46,17 @@ public class EnrollmentManagement {
 
         userManagement.getUsers().add(newUser);
         System.out.println("Registration successful! You can now login.");
+    }
+
+    private long generateUniqueUserId() {
+        while (true) {
+            long candidate = Utils.generateUniqueUserId10Digits();
+            final long checkId = candidate;
+            boolean exists = userManagement.getUsers().stream().anyMatch(u -> u.getUserId() == checkId);
+            if (!exists) {
+                return candidate;
+            }
+        }
     }
 
     public User login() {

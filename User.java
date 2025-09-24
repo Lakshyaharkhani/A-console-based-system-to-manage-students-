@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class User {
-    private int userId;
+    private long userId;
     private String username;
     private String email;
     private String phone;
@@ -9,7 +9,7 @@ public class User {
     private String userType;
     private ArrayList<CourseModel> courses;
 
-    public User(int userId, String username, String email, String phone, String password, String userType) {
+    public User(long userId, String username, String email, String phone, String password, String userType) {
         this.userId = userId;
         this.username = username;
         this.email = email;
@@ -19,11 +19,11 @@ public class User {
         this.courses = new ArrayList<>();
     }
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 

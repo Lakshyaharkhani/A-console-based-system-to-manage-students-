@@ -29,6 +29,10 @@ public class Utils {
             throw new IllegalArgumentException("Scanner and prompt cannot be null");
         }
         System.out.print(prompt);
+        if (!scanner.hasNextLine()) {
+            System.out.println("\nNo more input. Exiting.");
+            System.exit(0);
+        }
         String input = scanner.nextLine();
         return input != null ? input.trim() : "";
     }
@@ -50,5 +54,16 @@ public class Utils {
 
     public static int generateUniqueId() {
         return (int) (System.currentTimeMillis() % 100000);
+    }
+
+    public static long generateUniqueUserId10Digits() {
+        long base = System.currentTimeMillis();
+        // Ensure 10 digits by taking last 10 digits and avoiding leading zeros
+        long ten = 1_000_000_0000L; // 10^10
+        long candidate = base % ten;
+        if (candidate < 1_000_000_000L) { // ensure it is exactly 10 digits (>= 1,000,000,000)
+            candidate += 1_000_000_000L;
+        }
+        return candidate;
     }
 }

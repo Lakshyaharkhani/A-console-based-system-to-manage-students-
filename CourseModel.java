@@ -1,12 +1,16 @@
+import java.util.ArrayList;
+
 public class CourseModel {
     private int courseId;
     private String courseName;
     private String courseDuration;
+    private ArrayList<Assignment> assignments;
 
     public CourseModel(int courseId, String courseName, String courseDuration) {
         this.courseId = courseId;
         this.courseName = courseName;
         this.courseDuration = courseDuration;
+        this.assignments = new ArrayList<>();
     }
 
     public int getCourseId() {
@@ -51,5 +55,24 @@ public class CourseModel {
         return "Course ID: " + courseId + 
                ", Name: " + courseName + 
                ", Duration: " + courseDuration;
+    }
+
+    public void addAssignment(Assignment assignment) {
+        assignments.add(assignment);
+    }
+
+    public void removeAssignment(int assignmentId) {
+        assignments.removeIf(a -> a.getAssignmentId() == assignmentId);
+    }
+
+    public ArrayList<Assignment> getAssignments() {
+        return assignments;
+    }
+
+    public Assignment findAssignment(int assignmentId) {
+        return assignments.stream()
+                         .filter(a -> a.getAssignmentId() == assignmentId)
+                         .findFirst()
+                         .orElse(null);
     }
 }
